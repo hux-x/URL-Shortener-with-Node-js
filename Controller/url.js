@@ -1,10 +1,17 @@
 const shortid = require("shortid");
 const URL = require("../Model/url");
-const handleGetAnalytics = async (req,res)=>{
-    const id = req.params.id
-    const result = await URL.findOne({id})
-    res.json(result.visitHistory.length)
-}
+
+const handleGetAnalytics = async (req, res) => {
+    try {
+        const result = await URL.find({}); 
+        console.log(result)
+        res.render('analytics', { urls:result }); 
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).send('Error fetching data');
+    }
+};
+
 const handleGenerateShortUrl = async (req, res)=> {
   const body = req.body;
   if (!body.url){
@@ -17,7 +24,7 @@ const handleGenerateShortUrl = async (req, res)=> {
     redirectURL: body.url,
     visitHistory: [],
   });
-
+   return res.render('Home',{id:shortID})
   return res.json({ id: shortID });
 }
 module.exports = {handleGenerateShortUrl,handleGetAnalytics}

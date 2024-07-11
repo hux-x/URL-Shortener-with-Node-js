@@ -1,0 +1,119 @@
+<!-- views/analytics.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Analytics Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background-color: #000; /* Black background color */
+      color: #fff; /* White text color */
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      margin: 0;
+    }
+    .home-link {
+      color: #fff; /* White text color */
+      text-decoration: none; /* Remove underline from link */
+    }
+    .home-link:hover {
+      text-decoration: underline; /* Underline on hover */
+    }
+    .data-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* Three cards per row */
+      gap: 20px; /* Gap between grid items */
+    }
+    .data-item {
+      background: linear-gradient(135deg, #333, #555); /* Gradient background */
+      border-radius: 10px; /* Rounded corners */
+      padding: 30px; /* Increased padding for longer cards */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for card */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for hover effect */
+      color: #fff; /* White text color */
+    }
+    .data-item:hover {
+      transform: translateY(-5px); /* Move card up on hover */
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increased shadow on hover */
+    }
+    .data-item strong {
+      font-weight: bold; /* Bold text for labels */
+      color: #fff; /* White text color */
+    }
+    .url {
+      color: #4da1ff; /* Lighter blue for URL */
+      text-decoration: none; /* Remove underline from links */
+    }
+    .url:hover {
+      text-decoration: underline; /* Underline on hover */
+    }
+    .clicks {
+      color: #53cc8a; /* Lighter green for Clicks */
+    }
+    .shortened-url {
+      color: #ff5b5b; /* Lighter red for Shortened URL */
+    }
+    .timestamp {
+      color: #ad5dff; /* Lighter purple for Timestamp */
+    }
+    .secondary {
+      color: #999; /* Light gray for Secondary text */
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #888; /* Light gray divider line color */
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Analytics Data</h1>
+   <h3> <a href="/url" class="home-link">Home</a> </h3>
+  </div>
+
+  <div class="data-container">
+    <% if (locals.urls && urls.length > 0) { %>
+      <% urls.forEach(item => { %>
+        <div class="data-item">
+          <div>
+            <strong>URL:</strong> <a href="<%= item.redirectURL %>" class="url" target="_blank"><%= item.redirectURL %></a>
+          </div>
+          <div>
+            <strong>Clicks:</strong> <span class="clicks"><%= item.visitHistory.length %></span>
+          </div>
+          <hr> <!-- Divider between items -->
+          <div>
+            <strong>Shortened URL:</strong> <span class="shortened-url">localhost:5000/<%= item.shortId %></span>
+          </div>
+          <div>
+            <strong>Created:</strong> <span class="timestamp"><%= item.createdAt %></span>
+          </div>
+          <div>
+            <strong>Last visited:</strong> <span class="secondary"><%= item.updatedAt %></span>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p>No data found.</p>
+    <% } %>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hux</title>
+  <style>
+    body {
+      padding-top: 56px; /* Adjust for fixed navbar */
+      background: linear-gradient(45deg, #000, #333); /* Gradient background */
+      color: #fff; /* White text color */
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+  
+    .navbar.bg-gradient {
+      background: linear-gradient(45deg, #000, #333); /* Match body gradient */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease-in-out;
+    }
+  
+    .navbar-brand {
+      font-weight: bold;
+      color: #fff; /* White text color */
+      transition: transform 0.3s ease-in-out;
+    }
+  
+    .navbar-brand:hover {
+      transform: scale(1.1);
+    }
+  
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      padding: 0.5rem 1rem;
+      transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+  
+    .navbar-nav .nav-link:hover {
+      background-color: #444; /* Darker grey on hover */
+      border-radius: 5px;
+      transform: scale(1.05);
+    }
+  
+    .input-section {
+      margin: 50px auto;
+      max-width: 600px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Darker shadow */
+      border-radius: 8px;
+      animation: fadeIn 1s ease-in-out;
+    }
+  
+    .input-section h1, .input-section h2 {
+      color: #fff; /* White text color */
+    }
+  
+    .input-section input {
+      margin-bottom: 15px;
+      width: 80%;
+      margin: 0 auto;
+      padding: 10px;
+      border: 1px solid #555; /* Darker border */
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+      color: #fff; /* White text color */
+    }
+  
+    .input-section button {
+      width: 80%;
+      background: #000; /* Black background for button */
+      color: #fff; /* White text color */
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+  
+    .input-section button:hover {
+      background-color: #444; /* Darker grey on hover */
+      transform: scale(1.05);
+    }
+  
+    .message-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .input-section p#message {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #28a745; /* Green text color */
+      margin-right: 10px;
+    }
+  
+    .copy-icon {
+      color: #007bff; /* Blue icon color */
+      cursor: pointer;
+      transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+  
+    .copy-icon:hover {
+      color: #fff; /* White hover color */
+      transform: scale(1.1);
+    }
+  
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+  <link href="styles.css" rel="stylesheet"> <!-- Link to the external CSS file -->
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-gradient fixed-top">
+    <h1><a class="navbar-brand" href="/url">URL shortener</a></h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/url">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/url/analytics">Analytics</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Front Page with User Input -->
+  <form class="input-section" method="POST" action="/url">
+    <% if (locals.id) { %>
+      <h2>Shortened URL</h2>
+      <p id="message">http://localhost:5000/<%= locals.id %></p>
+      <i id="copyIcon" class="fas fa-copy copy-icon" onclick="copyMessage()"></i>
+    <% } else { %>
+      <h1>URL shortener</h1>
+      <label>Please enter your URL:</label>
+      <input type="text" id="userInput" class="form-control" placeholder="Enter your url" name="url">
+      <button class="btn btn-primary" type="submit">Generate short URL</button>
+      <div id="message-container" class="message-container">
+        <p id="message"></p>
+        <i id="copyIcon" class="fas fa-copy copy-icon" onclick="copyMessage()" style="display: none;"></i>
+      </div>
+    <% } %>
+  </form>
+
+  <script>
+    function copyMessage() {
+      var message = document.getElementById("message").innerText;
+      navigator.clipboard.writeText(message).then(function() {
+        alert('Message copied to clipboard!');
+      }, function(err) {
+        alert('Failed to copy message.');
+      });
+    }
+  </script>
+</body>
+</html>
