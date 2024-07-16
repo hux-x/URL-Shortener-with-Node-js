@@ -3,11 +3,29 @@ const {v4:uuidv4} = require('uuid')
 const {setUser} = require('../services/auth')
 let handleUserSignUp = async (req,res)=>{
     const {name,email,password} = req.body
+    const sessionId = uuidv4()
+    setUser(sessionId,User)
+    res.cookie("uid",sessionId)
    await user.create({
         name,password,email
     })
     res.redirect('/url')
 }
+
+let handleUserLogin = async(req,res)=>{
+  const {email,password} = req.body
+  console.log(email,password)
+  const User = await user.findOne({email,password})
+  if(!User){
+    res.render('userLogin')
+  }else{
+    const token = await setUser(User)
+    res.cookie("uid",token)
+    res.redirect('/url')
+
+  }   
+}
+
 let handleAdminLogin = async (req,res)=>{
     const {name,email,password} = req.body
    const User = await user.find({
@@ -21,17 +39,11 @@ let handleAdminLogin = async (req,res)=>{
 const URL = require('../Model/url')
 const handleGetAnalytics = async (req, res) => {
     try {
-      const {name,email,password} = req.body
-      const User = await user.findOne({name,email,password})
+      const User = req.user
       if(User){
-        const sessionId = uuidv4()
-        setUser(sessionId,User)
-        res.cookie("uid",sessionId)
-        const result = await URL.find({}); 
+        const result = await URL.find({createdBy: User._id}); 
         console.log(result)
         res.render('analytics', { urls:result }); 
-      }else{
-        res.redirect('/admin')
       }
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -43,4 +55,4 @@ const handleFormRender = async(req,res)=>{
     // if(req.cookie.uid) redirect('/analytics')
     res.render('login')
 }
-module.exports = {handleFormRender,handleAdminLogin,handleGetAnalytics}
+module.exports = {handleFormRender,handleAdminLogin,handleGetAnalytics,handleUserSignUp,handleUserLogin}
